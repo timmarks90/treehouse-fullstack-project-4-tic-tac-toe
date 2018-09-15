@@ -19,9 +19,18 @@ nameInput.style.borderStyle = 'none';
 const startButton = document.querySelector('#start .button');
 startButton.parentNode.insertBefore(nameInput, startButton);
 nameInput.focus();
+const gameTitle = document.createElement('h2');
+gameTitle.innerHTML = 'Select your game mode';
+gameTitle.style.color = '#fff';
+const gameMode = document.createElement('div');
+gameMode.className = 'game-mode';
+const playerButton = document.createElement('button');
+playerButton.className = 'game-button player';
+const computerButton = document.createElement('button');
+computerButton.className = 'game-button computer';
 
-// Display player name on page once game has begun
-const name = () => {
+// Display player name and opponent on page once game has begun
+const name = opponent => {
     const board = document.querySelector('#board header');
     const playerNameDiv = document.createElement('div');
     playerNameDiv.className = 'player-name';
@@ -29,28 +38,111 @@ const name = () => {
     playerNameTitle.style.margin = '50px auto';
     playerNameTitle.style.textAlign = 'center';
     playerNameTitle.style.color = '#444';
-    playerNameTitle.innerHTML = 'Good luck, ' + nameInput.value + '!';
+    playerNameTitle.innerHTML = nameInput.value + ' vs ' + opponent;
     playerNameDiv.appendChild(playerNameTitle);
     board.appendChild(playerNameDiv);
 }
 
-// On click of start button, hide intro screen
-const startScreen = document.querySelector('#start');
-startButton.addEventListener('click', () => {
+// Select game mode: Player or Computer
+const game = () => {   
+    // Style player and computer button
+    const buttonStyle = (button, message) => {
+        button.style.margin = '20px 20px 50px';
+        button.borderRadius = '5px';
+        button.style.padding = '20px 50px';
+        button.style.border = '2px solid #fff';
+        button.style.borderRadius = '5px';
+        button.style.background = 'none';
+        button.style.color = '#fff';
+        button.style.textAlign = 'center';
+        button.style.display = 'inline-block';
+        button.innerHTML = message;
+    }
+    buttonStyle(playerButton, 'Play Human');
+    buttonStyle(computerButton, 'Play Computer');
+    gameMode.appendChild(gameTitle);
+    gameMode.appendChild(playerButton);
+    gameMode.appendChild(computerButton);
+    startButton.parentNode.insertBefore(gameMode, startButton);
+}
+game();
+
+// change style of game mode buttons on hover
+playerButton.addEventListener('mouseover', () => {
+    playerButton.style.background = '#fff';
+    playerButton.style.color = '#54D17A';
+})
+// change style of game mode buttons on hover
+playerButton.addEventListener('mouseout', () => {
+    if (playerButton.classList.contains('active')) {
+        playerButton.style.background = '#fff';
+        playerButton.style.color = '#54D17A';
+    } else {
+        playerButton.style.background = 'none';
+        playerButton.style.color = '#fff';
+    }
+})
+// change style of game mode buttons on hover
+computerButton.addEventListener('mouseover', () => {
+    computerButton.style.background = '#fff';
+    computerButton.style.color = '#54D17A';
+})
+// change style of game mode buttons on hover
+computerButton.addEventListener('mouseout', () => {
+    if (computerButton.classList.contains('active')) {
+        computerButton.style.background = '#fff';
+        computerButton.style.color = '#54D17A';
+    } else {
+        computerButton.style.background = 'none';
+        computerButton.style.color = '#fff';
+    }
+})
+// On click of player game mode, set button to active
+playerButton.addEventListener('click', () => {
+    playerButton.className += ' active';
+    if (computerButton.classList.contains('active')) {
+        computerButton.style.background = 'none';
+        computerButton.style.color = '#fff';
+        computerButton.classList.remove('active');
+    }
+})
+
+// On click of computer game mode, set button to active
+computerButton.addEventListener('click', () => {
+    computerButton.className += ' active';
+    if (playerButton.classList.contains('active')) {
+        playerButton.style.background = 'none';
+        playerButton.style.color = '#fff';
+        playerButton.classList.remove('active');
+    }
+})
+const validateStart = () => {
     if(nameInput.value == '') {
         // Show error if user tried to start game without entering name
         nameInput.style.border = '2px solid rgb(255, 104, 104)';
-    } else {
-        name();
+    } 
+    else if (playerButton.classList.contains('active') == false && computerButton.classList.contains('active') == false) {
+        gameTitle.style.color = 'rgb(255, 104, 104)';
+    } 
+    else if (playerButton.classList.contains('active')) {
+        name('Human');
         startScreen.style.display = 'none';
     }
+    else if (computerButton.classList.contains('active')) {
+        name('Computer');
+        startScreen.style.display = 'none';
+    }
+}
+// On click of start button, hide intro screen
+const startScreen = document.querySelector('#start');
+    startButton.addEventListener('click', () => {
+    validateStart();
 });
 
 // Start the game if user clicked the Enter key on keyboard after typing in name on welcome screen
 nameInput.addEventListener("keydown", e => {
     if(e.keyCode == 13) {
-        name();
-        startScreen.style.display = 'none';
+        validateStart();
     }
 })
 
@@ -103,17 +195,30 @@ boxMouseOut();
 function boxClick() {
     for (let i = 0; i < box.length; i++) {
         box[i].addEventListener('click', e => {
-            if (player1.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
-                e.target.className += ' box-filled-1';
-                oBox.push(e.target[i]);
-                endGame();
-                player2Turn();
-            } else if (player2.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
-                e.target.className += ' box-filled-2';
-                xBox.push(e.target[i]);
-                endGame();
-                player1Turn();
+            if(playerButton.classList.contains('active')) {
+                if (player1.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
+                    e.target.className += ' box-filled-1';
+                    oBox.push(e.target[i]);
+                    endGame();
+                    player2Turn();
+                } else if (player2.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
+                    e.target.className += ' box-filled-2';
+                    xBox.push(e.target[i]);
+                    endGame();
+                    player1Turn();
+                }
+            } else if(computerButton.classList.contains('active')) {
+                if (player1.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
+                    e.target.className += ' box-filled-1';
+                    oBox.push(e.target[i]);
+                    endGame();
+                    player2Turn();
+                    computerPlay();
+                    endGame();
+                    player1Turn();
+                }
             }
+
         })
     }
 }
@@ -184,7 +289,65 @@ function resetGame() {
     nameInput.focus();
 }
 
-// startScreen.style.display = 'block';
-// if(playerTitle){
-//     playerTitle.remove();
+// Player against computer
+function computerPlay() {
+    for (let i = 0; i < winningMoves.length; i++) {
+        // Play move after 1 turn by player 1
+        if(winningMoves[i][0].classList.contains('box-filled-1') && !winningMoves[i][1].classList.contains('box-filled-1') && !winningMoves[i][2].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-2') && !winningMoves[i][1].classList.contains('box-filled-2') && !winningMoves[i][2].classList.contains('box-filled-2')){
+            winningMoves[i][1].className += ' box-filled-2';
+            xBox.push(winningMoves[i][1]);
+            endGame();
+            player1Turn();
+        } 
+        else if(winningMoves[i][1].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-1') && !winningMoves[i][2].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-2') && !winningMoves[i][1].classList.contains('box-filled-2') && !winningMoves[i][2].classList.contains('box-filled-2')){
+            winningMoves[i][2].className += ' box-filled-2';
+            xBox.push(winningMoves[i][2]);
+            endGame();
+            player1Turn();
+        } 
+        else if(winningMoves[i][2].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-1') && !winningMoves[i][1].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-2') && !winningMoves[i][1].classList.contains('box-filled-2') && !winningMoves[i][2].classList.contains('box-filled-2')){
+            winningMoves[i][1].className += ' box-filled-2';
+            xBox.push(winningMoves[i][1]);
+            endGame();
+            player1Turn();
+        } 
+        // Prevent Player 1 from winning by stopping 3rd in a row
+        else if(winningMoves[i][0].classList.contains('box-filled-1') && winningMoves[i][1].classList.contains('box-filled-1')){
+            winningMoves[i][2].className += ' box-filled-2';
+            xBox.push(winningMoves[i][2]);
+            endGame();
+            player1Turn();
+        } 
+        else if (winningMoves[i][0].classList.contains('box-filled-1') && winningMoves[i][2].classList.contains('box-filled-1')){
+            winningMoves[i][1].className += ' box-filled-2';
+            xBox.push(winningMoves[i][1]);
+            endGame();
+            player1Turn();
+        }
+        else if (winningMoves[i][1].classList.contains('box-filled-1') && winningMoves[i][2].classList.contains('box-filled-1')){
+            winningMoves[i][0].className += ' box-filled-2';
+            xBox.push(winningMoves[i][0]);
+            endGame();
+            player1Turn();
+        }
+    }
+}
+
+// function boxClick() {
+//     for (let i = 0; i < box.length; i++) {
+//         box[i].addEventListener('click', e => {
+//             if (player1.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
+//                 e.target.className += ' box-filled-1';
+//                 oBox.push(e.target[i]);
+//                 endGame();
+//                 player2Turn();
+//             } else if (player2.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
+//                 e.target.className += ' box-filled-2';
+//                 xBox.push(e.target[i]);
+//                 endGame();
+//                 player1Turn();
+//             }
+//         })
+//     }
 // }
+// boxClick();
