@@ -332,22 +332,3 @@ function computerPlay() {
         }
     }
 }
-
-// function boxClick() {
-//     for (let i = 0; i < box.length; i++) {
-//         box[i].addEventListener('click', e => {
-//             if (player1.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
-//                 e.target.className += ' box-filled-1';
-//                 oBox.push(e.target[i]);
-//                 endGame();
-//                 player2Turn();
-//             } else if (player2.classList.contains('active') && (e.target.classList.contains('box-filled-1') == false && e.target.classList.contains('box-filled-2') == false)) {
-//                 e.target.className += ' box-filled-2';
-//                 xBox.push(e.target[i]);
-//                 endGame();
-//                 player1Turn();
-//             }
-//         })
-//     }
-// }
-// boxClick();
