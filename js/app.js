@@ -252,7 +252,6 @@ function endGame() {
                 break;
             } else {
                 newGamePage('It\'s a Tie!', ' screen-win-tie');
-                console.log('tie');
             }
         }
     }
@@ -299,19 +298,16 @@ function computerPlay() {
                 // If computer has 2 in a row, play winning turn
                 if(player2.classList.contains('active') && winningMoves[i][0].classList.contains('box-filled-2') && winningMoves[i][1].classList.contains('box-filled-2') && !winningMoves[i][2].classList.contains('box-filled-1')){
                     winningMoves[i][2].className += ' box-filled-2';
-                    console.log('comp move 1');
                     xBox.push(winningMoves[i][2]);
                     endGame();
                     player1Turn();
                 } else if(player2.classList.contains('active') && winningMoves[i][1].classList.contains('box-filled-2') && winningMoves[i][2].classList.contains('box-filled-2') && !winningMoves[i][0].classList.contains('box-filled-1')){
                     winningMoves[i][0].className += ' box-filled-2';
-                    console.log('comp move 2');
                     xBox.push(winningMoves[i][0]);
                     endGame();
                     player1Turn();
                 } else if(player2.classList.contains('active') && winningMoves[i][0].classList.contains('box-filled-2') && winningMoves[i][2].classList.contains('box-filled-2') && !winningMoves[i][1].classList.contains('box-filled-1')){
                     winningMoves[i][1].className += ' box-filled-2';
-                    console.log('comp move 3');
                     xBox.push(winningMoves[i][1]);
                     endGame();
                     player1Turn();
@@ -320,7 +316,6 @@ function computerPlay() {
             // Prevent Player 1 from winning by stopping 3rd in a row
             if(player2.classList.contains('active') && winningMoves[i][0].classList.contains('box-filled-1') && winningMoves[i][1].classList.contains('box-filled-1') && !winningMoves[i][2].classList.contains('box-filled-2')){
                 winningMoves[i][2].className += ' box-filled-2';
-                console.log('comp move 4');
                 xBox.push(winningMoves[i][2]);
                 endGame();
                 player1Turn();
@@ -328,14 +323,12 @@ function computerPlay() {
             else if (player2.classList.contains('active') && winningMoves[i][0].classList.contains('box-filled-1') && winningMoves[i][2].classList.contains('box-filled-1') && !winningMoves[i][1].classList.contains('box-filled-2')){
                 winningMoves[i][1].className += ' box-filled-2';
                 xBox.push(winningMoves[i][1]);
-                console.log('comp move 5');
                 endGame();
                 player1Turn();
             }
             else if (player2.classList.contains('active') && winningMoves[i][1].classList.contains('box-filled-1') && winningMoves[i][2].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-2')){
                 winningMoves[i][0].className += ' box-filled-2';
                 xBox.push(winningMoves[i][0]);
-                console.log('comp move 6');
                 endGame();
                 player1Turn();
             }
@@ -344,20 +337,17 @@ function computerPlay() {
         if(player2.classList.contains('active') && winningMoves[i][0].classList.contains('box-filled-1') && !winningMoves[i][1].classList.contains('box-filled-1') && !winningMoves[i][2].classList.contains('box-filled-1')  && !winningMoves[i][1].classList.contains('box-filled-2')){
             winningMoves[i][1].className += ' box-filled-2';
             xBox.push(winningMoves[i][1]);
-            console.log('comp move 7');
             endGame();
             player1Turn();
         } 
         else if(player2.classList.contains('active') && winningMoves[i][1].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-1') && !winningMoves[i][2].classList.contains('box-filled-1') && !winningMoves[i][2].classList.contains('box-filled-2')){
             winningMoves[i][2].className += ' box-filled-2';
             xBox.push(winningMoves[i][2]);
-            console.log('comp move 8');
             endGame();
             player1Turn();
         } 
         else if(player2.classList.contains('active') && winningMoves[i][2].classList.contains('box-filled-1') && !winningMoves[i][0].classList.contains('box-filled-1') && !winningMoves[i][1].classList.contains('box-filled-1') && !winningMoves[i][1].classList.contains('box-filled-2')){
             winningMoves[i][1].className += ' box-filled-2';
-            console.log('comp move 9');
             xBox.push(winningMoves[i][1]);
             endGame();
             player1Turn();
